@@ -1,6 +1,12 @@
 Changes
 =======
 
+4.7.13.10 (2023-10-20)
+---------------------
+
+- Pin Pillow library to solve CVE-2023-4863. For imformation about security issue in Jira in the ticket SECOPS-4264.
+
+
 4.7.13.9 (2021-02-18)
 ---------------------
 
