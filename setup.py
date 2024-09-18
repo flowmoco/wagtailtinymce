@@ -41,7 +41,7 @@ def read(filename):
 
 install_requires = [
     'wagtail>=2.6',
-    'Pillow==10.0.1',
+    'Pillow>=10.0.1',
     ]
 
 
