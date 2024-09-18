@@ -41,7 +41,10 @@ if DJANGO_VERSION >= '2.0':
 else:
     from django.core.urlresolvers import reverse
 
-if WAGTAIL_VERSION >= '2.0':
+if WAGTAIL_VERSION >= '3.0':
+    from wagtail.admin.templatetags.wagtailadmin_tags import hook_output
+    from wagtail import hooks
+elif WAGTAIL_VERSION >= '2.0':
     from wagtail.admin.templatetags.wagtailadmin_tags import hook_output
     from wagtail.core import hooks
 else:
@@ -97,6 +100,11 @@ def insert_editor_js():
 
 @hooks.register('insert_tinymce_js')
 def images_richtexteditor_js():
+    if WAGTAIL_VERSION >= '4.0':
+        chooser_select_format = 'wagtailimages_chooser:select_format'
+    else:
+        chooser_select_format = 'wagtailimages:chooser_select_format'
+
     preload = format_html(
         """
         <script>
@@ -106,7 +114,7 @@ def images_richtexteditor_js():
         """,
         to_js_primitive(static('wagtailtinymce/js/tinymce-plugins/wagtailimage.js')),
         to_js_primitive(translation.to_locale(translation.get_language())),
-        to_js_primitive(reverse('wagtailimages:chooser_select_format', args=['00000000']))
+        to_js_primitive(reverse(chooser_select_format, args=['00000000']))
     )
     js_includes = _format_js_includes([
         'wagtailimages/js/image-chooser-modal.js',
