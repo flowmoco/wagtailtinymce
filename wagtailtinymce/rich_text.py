@@ -33,7 +33,12 @@ from django.utils import translation
 from wagtail import __version__ as WAGTAIL_VERSION
 from wagtail.utils.widgets import WidgetWithScript
 
-if WAGTAIL_VERSION >= '2.0':
+if WAGTAIL_VERSION >= '4.0':
+    from wagtail.admin.panels import FieldPanel
+    from wagtail.admin.rich_text.converters.editor_html import \
+        EditorHTMLConverter
+    from wagtail.rich_text import features
+elif WAGTAIL_VERSION >= '2.0':
     from wagtail.admin.edit_handlers import RichTextFieldPanel
     from wagtail.admin.rich_text.converters.editor_html import \
         EditorHTMLConverter
@@ -85,7 +90,10 @@ class TinyMCERichTextArea(WidgetWithScript, widgets.Textarea):
                 self.converter = EditorHTMLConverter(self.features)
 
     def get_panel(self):
-        return RichTextFieldPanel
+        if WAGTAIL_VERSION >= '4.0':
+            return FieldPanel
+        else:
+            return RichTextFieldPanel
 
     def render(self, name, value, attrs=None, renderer=None):
         if value is None:
